@@ -1,25 +1,19 @@
 import { useState, useRef } from "react";
 import chatIcon from './../asset/images/chatIcon.png'
 
-import Auth from "./Auth";
-import Cookies from 'universal-cookie'
+
 import Chat from "./Chat";
-const cookie = new Cookies()
 
 import { FaUserSecret } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 
 export default function App() {
-  const [isAuth, setisAuth] = useState(cookie.get('auth-token'))
+
   const [room, setRoom] = useState(null)
 
   const roomInputRef = useRef(null)
 
-  if (!isAuth) {
-    return (
-      <div> <Auth setisAuth={setisAuth} /></div>
-    );
-  }
+ 
   return (
     <>
       {room ? (
