@@ -40,11 +40,20 @@ export default function App() {
             ref={roomInputRef} />
           <br />
 
-          <div className='flex items-center justify-center gap-2 mx-auto mt-8 shadow-md  sm:w-5/12 p-2 w-6/12 rounded-lg bg-teal-600 '
-            onClick={() => setRoom(roomInputRef.current.value)}>
-            <span className="text-white"> Enter Room</span>
-            <IoChatboxEllipses size={30} className="  text-blue-600 bg-white rounded-full p-1" />
-          </div>
+          <div 
+          className='flex items-center justify-center gap-2 mx-auto mt-8 shadow-md sm:w-5/12 p-2 w-6/12 rounded-lg bg-teal-600'
+          onClick={() => {
+            const roomName = roomInputRef.current.value.trim(); // Trim whitespace
+            if (roomName === "") {
+              alert("Room name cannot be empty!"); // Show an alert or handle it differently
+              return;
+            }
+            setRoom(roomName);
+          }}
+        >
+          <span className="text-white"> Enter Room</span>
+          <IoChatboxEllipses size={30} className="text-blue-600 bg-white rounded-full p-1" />
+        </div>
         </div>
       )}
     </>
