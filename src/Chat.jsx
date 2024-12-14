@@ -49,7 +49,7 @@ export default function Chat(props) {
     };
 
     return (
-        <div className="w-screen min-h-screen flex flex-col relative border border-4 border-teal-800">
+        <div className="w-screen min-h-screen flex flex-col relative bg-teal-100 ">
             <div className=" flex justify-center items-center text-center bg-teal-600 text-white text-b py-2 d-sticky gap-2">
                 <IoChatboxEllipses size={30} className="text-blue-500 bg-white rounded-full p-1" />
                 <span className="text-xl">Chat</span>
@@ -72,11 +72,11 @@ export default function Chat(props) {
                         >
                             <div
                                 className={`max-w-xs p-1 rounded-lg ${isSender
-                                        ? "bg-green-300 border-4 rounded-md border-green-400 text-right m-1"
-                                        : "bg-purple-300 border-4 rounded-md border-purple-400 text-left m-1"
+                                    ? "bg-teal-300  rounded-md  text-left m-1 p-2"
+                                        : "bg-green-200 rounded-md  text-right m-1 p-2"
                                     }`}
                             >
-                                <p className="text-sm font-bold">{message.user}</p>
+                                <p className="text-sm font-semibold">{message.user}</p>
                                 <p className="text-sm">{message.text}</p>
                                 <p className="text-xs text-gray-600">{formattedTime}</p>
                             </div>
@@ -84,16 +84,16 @@ export default function Chat(props) {
                     );
                 })}
             </div>
-            <form onSubmit={handleSubmit} className="flex">
+            <form onSubmit={handleSubmit} className="flex gap-2 mb-4 px-1">
                 <input
-                    className="border-2 border-gray-200  px-2 py-1 w-[75%]"
-                    placeholder="Type your message..."
+                    className="border-2 border-gray-500  px-2 py-1 w-[75%] rounded-full outline-none "
+                    placeholder="Type your message here..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                 />
                 <button
                     type="submit"
-                    className="bg-teal-600 px-3 py-1  text-white w-[25%]"
+                    className="bg-teal-600 px-3 py-2  text-white w-[25%] rounded-full"
                     disabled={loading}
                 >
                     {loading ? (

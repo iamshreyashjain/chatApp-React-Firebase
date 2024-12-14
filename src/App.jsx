@@ -25,25 +25,25 @@ export default function App() {
       {room ? (
         <> <Chat room={room} /> </>
       ) : (
-        <div className="mx-auto text-center sm:mt-24 p-4 border-green-300 border-4 rounded shadow-md sm:w-4/12 bg-green-200 h-screen min-w-screen sm:h-96 ">
+        <div className="mx-auto text-center sm:mt-24 p-4   shadow-md sm:w-4/12 bg-teal-100 h-screen min-w-screen sm:h-96 ">
           <span className='flex items-center justify-center bg-purple-400 shadow-md rounded-full w-2/12 p-1 mx-auto mt-6 sm-mt-0'>
             <img src={chatIcon} width={100} />
 
           </span>
           <div className="flex items-center justify-center mt-4 gap-2">
-            <FaUserSecret size={30} className="text-lime-800" />
+            <FaUserSecret size={30} className="" />
             <label className="text-xl">Enter Room Name </label>
-            <FaUserSecret size={30} className="text-lime-800" />
+            <FaUserSecret size={30} className="" />
           </div>
           <input
-            className="border border-gray-900 rounded p-2 mt-4 outline-none"
+            className="border border-gray-900 rounded p-2 mt-4 outline-none "
             ref={roomInputRef} />
           <br />
 
-          <div className='flex items-center justify-center gap-2 mx-auto mt-6 border-2 border-blue-300 sm:w-5/12 p-2 w-6/12 rounded-lg bg-blue-100 hover:bg-blue-300 '
+          <div className='flex items-center justify-center gap-2 mx-auto mt-8 shadow-md  sm:w-5/12 p-2 w-6/12 rounded-lg bg-teal-600 '
             onClick={() => setRoom(roomInputRef.current.value)}>
-            <span> Enter Room</span>
-            <IoChatboxEllipses size={30} className="text-blue-500 bg-white rounded-full p-1" />
+            <span className="text-white"> Enter Room</span>
+            <IoChatboxEllipses size={30} className="  text-blue-600 bg-white rounded-full p-1" />
           </div>
         </div>
       )}
