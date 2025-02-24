@@ -113,11 +113,11 @@ export default function Chat(props) {
                 className={`max-w-xs p-1 rounded-lg ${
                   isSender
                     ? "bg-teal-300 rounded-md text-left m-1 p-2"
-                    : "bg-green-200 rounded-md text-right m-1 p-2"
+                    : "bg-green-200 rounded-md text-left m-1 p-2"
                 }`}
               >
                 <p className="text-sm font-semibold">{message.user}</p>
-                <p className="text-lg ">{message.text}</p>
+                <p className="">{message.text}</p>
                 <p className="text-xs text-gray-600">{formattedTime}</p>
               </div>
             </div>
@@ -125,11 +125,11 @@ export default function Chat(props) {
         })}
       </div>
       <form onSubmit={handleSubmit}
-      className="sticky z-10 flex gap-2 px-1 mb-4 transition-opacity duration-300 bottom-4 opacity-80 focus-within:opacity-100"
+      className="sticky z-10 flex gap-2 px-1 mb-4 transition-opacity duration-300 rounded-full bottom-4 opacity-80 focus-within:opacity-100"
 
        >
         <input
-          className="border-2 border-gray-500 px-2 py-1 w-[97%] rounded-full outline-none"
+          className="border-2 border-gray-500 px-2 py-1 w-[97%] rounded-full outline-none shadow-md"
           placeholder="Type your message here..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
@@ -137,20 +137,20 @@ export default function Chat(props) {
         <div className="relative" ref={emojiPickerRef}>
           <button
             type="button"
-            className="px-3 py-2 text-2xl bg-gray-300 rounded-full hover:bg-gray-200"
+            className="px-3 py-2 text-2xl bg-gray-300 rounded-full shadow-md hover:bg-gray-200"
             onClick={() => setShowEmojiPicker((prev) => !prev)}
           >
             😊
           </button>
           {showEmojiPicker && (
-            <div className="absolute right-0 z-10 bottom-10">
+            <div className="absolute right-0 z-10 shadow-md bottom-10">
               <Picker data={data} onEmojiSelect={handleEmojiSelect} />
             </div>
           )}
         </div>
         <button
           type="submit"
-          className="px-3 py-3 text-white bg-teal-600 rounded-full"
+          className="px-3 py-3 text-white bg-teal-600 rounded-full shadow-xl"
           disabled={loading}
         >
           {loading ? (
