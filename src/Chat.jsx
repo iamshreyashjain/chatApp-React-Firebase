@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   addDoc,
   collection,
@@ -19,7 +19,9 @@ export default function Chat(props) {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // State to toggle emoji picker
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef(null); // Reference for emoji picker
+
   const messageRef = collection(db, "messages");
 
   useEffect(() => {
@@ -29,13 +31,30 @@ export default function Chat(props) {
       snapshot.forEach((doc) => {
         messages.push({ ...doc.data(), id: doc.id });
       });
-      // Sort messages by timestamp
       messages.sort((a, b) => a.createdAt?.seconds - b.createdAt?.seconds);
       setMessages(messages);
     });
 
     return () => unsubscribe();
-  }, [room]); // Re-run if room changes
+  }, [room]);
+
+  useEffect(() => {
+    // Function to detect clicks outside of the emoji picker
+    const handleClickOutside = (event) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    // Attach event listener when emoji picker is open
+    if (showEmojiPicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showEmojiPicker]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,25 +78,30 @@ export default function Chat(props) {
   };
 
   const handleEmojiSelect = (emoji) => {
-    setNewMessage((prevMessage) => prevMessage + emoji.native); // Append emoji to message
-    setShowEmojiPicker(false); // Close picker after selection
+    setNewMessage((prevMessage) => prevMessage + emoji.native);
+    setShowEmojiPicker(false);
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col relative bg-teal-100">
-      <div className="flex justify-center items-center text-center bg-teal-600 text-white py-2 sticky gap-2">
-        <IoChatboxEllipses size={30} className="text-blue-500 bg-white rounded-full p-1" />
+    <div className="relative flex flex-col w-screen min-h-screen bg-teal-100">
+      <div className="sticky flex items-center justify-center gap-2 py-2 text-center text-white bg-teal-600">
+        <IoChatboxEllipses size={30} className="p-1 text-blue-500 bg-white rounded-full" />
         <span className="text-xl">Chat</span>
       </div>
-      <div className="flex-grow overflow-y-auto bg-teal-100 p-2 sticky">
+      <div className="sticky flex-grow p-2 overflow-y-auto bg-teal-100">
         {messages.map((message) => {
           const isSender = message.user === auth.currentUser.displayName;
           const formattedTime = message.createdAt
-            ? new Intl.DateTimeFormat("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-              }).format(message.createdAt.toDate())
-            : "Loading...";
+          ? new Intl.DateTimeFormat("en-US", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true, 
+            }).format(message.createdAt.toDate()).replace(",", "") // Remove extra comma
+          : "Loading...";
+        
 
           return (
             <div
@@ -92,47 +116,43 @@ export default function Chat(props) {
                 }`}
               >
                 <p className="text-sm font-semibold">{message.user}</p>
-                <p className="sm:text-xl text-lg">{message.text}</p>
+                <p className="text-lg ">{message.text}</p>
                 <p className="text-xs text-gray-600">{formattedTime}</p>
               </div>
             </div>
           );
         })}
       </div>
-      <form onSubmit={handleSubmit} className="flex gap-2 mb-4 px-1">
+      <form onSubmit={handleSubmit} className="flex gap-2 px-1 mb-8">
         <input
           className="border-2 border-gray-500 px-2 py-1 w-[97%] rounded-full outline-none"
           placeholder="Type your message here..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
-        <div className="relative">
+        <div className="relative" ref={emojiPickerRef}>
           <button
             type="button"
-            className="bg-gray-300 px-3 py-2 rounded-full text-2xl hover:bg-gray-200"
+            className="px-3 py-2 text-2xl bg-gray-300 rounded-full hover:bg-gray-200"
             onClick={() => setShowEmojiPicker((prev) => !prev)}
           >
             😊
           </button>
           {showEmojiPicker && (
-            <div className="absolute bottom-0 right-0 z-10">
+            <div className="absolute right-0 z-10 bottom-10">
               <Picker data={data} onEmojiSelect={handleEmojiSelect} />
             </div>
           )}
         </div>
         <button
           type="submit"
-          className="bg-teal-600 px-3 py-3 text-white  rounded-full"
+          className="px-3 py-3 text-white bg-teal-600 rounded-full"
           disabled={loading}
         >
           {loading ? (
-            <div className="flex justify-center items-center gap-2">
-              <MdAccessTime size={25} />
-            </div>
+            <MdAccessTime size={25} />
           ) : (
-            <div className="flex justify-center items-center gap-2">
-              <BiSolidSend size={25} />
-            </div>
+            <BiSolidSend size={25} />
           )}
         </button>
       </form>
