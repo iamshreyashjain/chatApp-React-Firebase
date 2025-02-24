@@ -124,7 +124,10 @@ export default function Chat(props) {
           );
         })}
       </div>
-      <form onSubmit={handleSubmit} className="flex gap-2 px-1 mb-8">
+      <form onSubmit={handleSubmit}
+      className="sticky z-10 flex gap-2 px-1 mb-4 transition-opacity duration-300 bottom-4 opacity-80 focus-within:opacity-100"
+
+       >
         <input
           className="border-2 border-gray-500 px-2 py-1 w-[97%] rounded-full outline-none"
           placeholder="Type your message here..."
