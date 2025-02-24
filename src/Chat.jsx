@@ -84,10 +84,11 @@ export default function Chat(props) {
 
   return (
     <div className="relative flex flex-col w-screen min-h-screen bg-teal-100">
-      <div className="sticky flex items-center justify-center gap-2 py-2 text-center text-white bg-teal-600">
-        <IoChatboxEllipses size={30} className="p-1 text-blue-500 bg-white rounded-full" />
-        <span className="text-xl">Chat</span>
-      </div>
+    <div className="sticky top-0 z-10 flex items-center justify-center gap-2 py-2 text-center text-white bg-teal-600">
+  <IoChatboxEllipses size={30} className="p-1 text-blue-500 bg-white rounded-full" />
+  <span className="text-xl">Chat</span>
+</div>
+
       <div className="sticky flex-grow p-2 overflow-y-auto bg-teal-100">
         {messages.map((message) => {
           const isSender = message.user === auth.currentUser.displayName;
